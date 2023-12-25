@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node dist/server.js",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "deploy": "npm run build && vercel",
-    "redeploy": "npm run build && vercel --prod",
+    "deploy": "yarn build && vercel",
+    "redeploy": "yarn build && vercel --prod",
     "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
