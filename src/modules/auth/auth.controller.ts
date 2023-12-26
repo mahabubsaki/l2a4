@@ -25,11 +25,11 @@ export const authLoginController = catchAsync(async (req: Request, res: Response
 
     const userData: Pick<IUser, 'username' | 'password'> = req.body;
     const result = await loginService(userData);
-    sendResponse<IUser>(res, {
+    sendResponse<{ user: Omit<IUser, 'password'>, token: string; }>(res, {
         statusCode: 201,
         success: true,
         data: result,
-        message: "User registered successfully"
+        message: "User login successful"
     });
 });
 

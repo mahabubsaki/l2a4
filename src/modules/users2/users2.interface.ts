@@ -1,3 +1,4 @@
+import { JwtPayload } from "jsonwebtoken";
 import { Model } from "mongoose";
 
 export interface IUser {
@@ -7,7 +8,9 @@ export interface IUser {
     role: 'user' | 'admin';
 }
 
-
+export interface IJwtPayload extends JwtPayload {
+    _id: string, role: string, email: string;
+}
 export interface IUserMethods {
     demo: () => string;
 }
