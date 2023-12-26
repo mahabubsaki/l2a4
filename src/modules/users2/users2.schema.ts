@@ -8,6 +8,16 @@ const userMongooseSchema = new Schema<IUser>(
         username: { type: String, unique: true, required: true },
         email: { type: String, unique: true, required: true },
         password: { type: String, required: true },
+        passwordHistory: {
+            type: [
+                {
+                    password: { type: String, required: true },
+                    timestamp: { type: Date, default: Date.now },
+                },
+            ],
+            required: true,
+            _id: false
+        },
         role: { type: String, enum: ['user', 'admin'], default: 'user' },
     },
     { timestamps: true }
@@ -18,6 +28,7 @@ userMongooseSchema.pre('save', async function (next) {
 
 
         this.password = await passwordHasher(this.password);
+        this.passwordHistory[0] = { password: this.password, timestamp: new Date() };
 
         next();
     } catch (error) {

@@ -13,9 +13,9 @@ import { Error } from 'mongoose';
 const globalErrorHandler: ErrorRequestHandler = (err, _, res, __) => {
 
     let error: TGenericErrorResponse = {
-        errorMessage: "Something went wrong",
-        errorDetails: [{ message: "Something went wrong", path: "" }],
-        message: "Something went wrong",
+        errorMessage: err?.message || "Something went wrong",
+        errorDetails: [{ message: err?.message || "Something went wrong", path: "" }],
+        message: err?.message || "Something went wrong",
         stack: err.stack,
         statusCode: 500,
         success: false
