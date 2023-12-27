@@ -33,7 +33,7 @@ const categoryMongooseSchema = new mongoose.Schema({
         }
     }
 
-});
+}, { timestamps: true });
 
 
 const categoryZodSchema = z.object({

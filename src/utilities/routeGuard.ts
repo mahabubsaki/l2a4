@@ -19,7 +19,7 @@ const routeGuard = (...roles: string[]) => async (req: Request, _: Response, nex
         }
 
         if (roles.length && !roles.includes(verifiedUser.role)) {
-            throw new AppError(httpStatus.FORBIDDEN, "you do not have access to this");
+            throw new AppError(httpStatus.FORBIDDEN, "You do not have the necessary permissions to access this resource.");
         }
         req.user = validUser;
         next();

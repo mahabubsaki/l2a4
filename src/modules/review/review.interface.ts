@@ -1,12 +1,13 @@
 /* Interface content */
 
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
 
 export interface IReview {
     courseId: string;
     rating: number;
     review: string;
+    createdBy: Types.ObjectId;
 }
 
 

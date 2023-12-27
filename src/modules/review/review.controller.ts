@@ -11,7 +11,7 @@ import httpStatus from "http-status";
 export const reviewPostController = catchAsync(async (req: Request, res: Response) => {
 
     const reviewData: IReview = req.body;
-    const result = await reviewPost(reviewData);
+    const result = await reviewPost(reviewData, req.user._id);
     sendResponse<IReview>(res, {
         statusCode: httpStatus.OK,
         success: true,

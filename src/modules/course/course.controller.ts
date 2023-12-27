@@ -15,7 +15,7 @@ import mongoose from "mongoose";
 export const coursePostController = catchAsync(async (req: Request, res: Response) => {
 
     const userData: ICourse = req.body;
-    const result = await coursePost(userData);
+    const result = await coursePost(userData, req.user._id);
     sendResponse<ICourse>(res, {
         statusCode: httpStatus.OK,
         success: true,

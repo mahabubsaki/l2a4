@@ -66,7 +66,7 @@ const reviewMongooseSchema = new mongoose.Schema({
 
         }
     }
-});
+}, { timestamps: true });
 
 
 const reviewZodSchema = z.object({

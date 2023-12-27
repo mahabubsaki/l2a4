@@ -1,4 +1,4 @@
-import { Model, Schema } from 'mongoose';
+import { Model, Schema, Types } from 'mongoose';
 
 interface ITag {
     name: string;
@@ -21,6 +21,7 @@ export interface ICourse {
     language: string;
     provider: string;
     durationInWeeks: number;
+    createdBy: Types.ObjectId;
     details: ICourseDetails;
 }
 

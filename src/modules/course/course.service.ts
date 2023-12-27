@@ -7,8 +7,9 @@ import Course from "./course.model";
 import { IReview } from "../review/review.interface";
 import retrieveNested from "../../utilities/retrieveNested";
 
-export const coursePost = async (payload: ICourse): Promise<ICourse> => {
-    payload.durationInWeeks = dateToWeek(payload.startDate, payload.endDate);
+export const coursePost = async (payload: ICourse, userId: Types.ObjectId): Promise<ICourse> => {
+    payload.durationInWeeks = payload.durationInWeeks || dateToWeek(payload.startDate, payload.endDate);
+    payload.createdBy = userId;
     const result = (await Course.create(payload)).toObject();
     return result;
 };
@@ -46,8 +47,40 @@ export const courseWithReviewGet = async (id: string): Promise<{ course: ICourse
                             provider: 1,
                             durationInWeeks: 1,
                             details: 1,
+                            createdBy: 1
                         },
+                    }, {
+                        $lookup: {
+                            from: "users2",
+                            localField: "createdBy",
+                            foreignField: "_id",
+                            as: "createdBy"
+                        }
                     },
+                    {
+                        $project: {
+                            _id: 1,
+                            title: 1,
+                            instructor: 1,
+                            categoryId: 1,
+                            price: 1,
+                            tags: 1,
+                            startDate: 1,
+                            endDate: 1,
+                            language: 1,
+                            provider: 1,
+                            durationInWeeks: 1,
+                            details: 1,
+                            createdBy: {
+                                $arrayElemAt: ['$createdBy', 0]
+                            },
+                        }
+                    }, {
+                        $project: {
+                            "createdBy.password": 0,
+                            "createdBy.passwordHistory": 0,
+                        }
+                    }
                 ],
                 reviews: [
                     {
@@ -63,12 +96,36 @@ export const courseWithReviewGet = async (id: string): Promise<{ course: ICourse
                     },
                     {
                         $project: {
-                            _id: 0,
                             courseId: "$reviews.courseId",
                             rating: "$reviews.rating",
                             review: "$reviews.review",
+                            createdBy: "$reviews.createdBy"
                         },
                     },
+                    {
+                        $lookup: {
+                            from: "users2",
+                            localField: "createdBy",
+                            foreignField: "_id",
+                            as: "createdBy",
+                        },
+                    },
+                    {
+                        $project: {
+                            courseId: 1,
+                            rating: 1,
+                            review: 1,
+                            createdBy: {
+                                $arrayElemAt: ['$createdBy', 0]
+                            },
+                        },
+                    },
+                    {
+                        $project: {
+                            "createdBy.password": 0,
+                            "createdBy.passwordHistory": 0,
+                        },
+                    }
                 ],
             },
         },
@@ -113,7 +170,43 @@ export const courseBestGet = async (): Promise<{ course: ICourse; }> => {
                 durationInWeeks: 1,
                 details: 1,
                 averageRating: 1,
-                reviewCount: 1
+                reviewCount: 1,
+                createdBy: 1
+            },
+        },
+        {
+            $lookup: {
+                from: 'users2',
+                localField: 'createdBy',
+                foreignField: '_id',
+                as: 'createdBy'
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                title: 1,
+                instructor: 1,
+                categoryId: 1,
+                price: 1,
+                tags: 1,
+                startDate: 1,
+                endDate: 1,
+                language: 1,
+                provider: 1,
+                durationInWeeks: 1,
+                details: 1,
+                averageRating: 1,
+                reviewCount: 1,
+                createdBy: {
+                    $arrayElemAt: ['$createdBy', 0]
+                },
+            },
+        },
+        {
+            $project: {
+                "createdBy.password": 0,
+                "createdBy.passwordHistory": 0,
             },
         },
         {
@@ -158,7 +251,7 @@ export const courseUpdate = async (id: string, payload: Partial<ICourse>): Promi
 
             },
 
-        }, { session, new: true });
+        }, { session, new: true, populate: { path: 'createdBy', model: 'User2', select: { password: 0, passwordHistory: 0 } } });
 
         await session.commitTransaction();
         return result as ICourse;

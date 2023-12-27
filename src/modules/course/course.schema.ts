@@ -91,33 +91,33 @@ const courseMongooseSchema = new mongoose.Schema({
         description: {
             type: String,
             required: true,
-        },
-        createdBy: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User2',
-            required: true,
-            validate: {
-                validator: async function (value: mongoose.Schema.Types.ObjectId) {
-                    try {
-                        const user = await User2.findById(value);
-                        if (!user) {
-                            const error = new mongoose.Error.CastError(
-                                'createdBy',
-                                value,
-                                'No User found with this id'
-                            );
-                            throw error;
-                        }
-                        return true;
-                    } catch (err) {
-                        throw err;
-                    }
-                },
-
-            }
         }
     },
-});
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User2',
+        required: true,
+        validate: {
+            validator: async function (value: mongoose.Schema.Types.ObjectId) {
+                try {
+                    const user = await User2.findById(value);
+                    if (!user) {
+                        const error = new mongoose.Error.CastError(
+                            'createdBy',
+                            value,
+                            'No User found with this id'
+                        );
+                        throw error;
+                    }
+                    return true;
+                } catch (err) {
+                    throw err;
+                }
+            },
+
+        }
+    }
+}, { timestamps: true });
 
 courseMongooseSchema.pre('findOneAndUpdate', async function (next) {
     const query = this.getQuery();
@@ -149,6 +149,7 @@ const courseZodSchema = z.object({
         name: z.string(),
         isDeleted: z.boolean(),
     }).strict()).nonempty(),
+    durationInWeeks: z.number().optional(),
     startDate: z.string().refine(value => /^\d{4}-\d{2}-\d{2}$/.test(value), { message: "Invalid start Date given. Please use the 'YYYY-MM-DD' format." }),
     endDate: z.string().refine(value => /^\d{4}-\d{2}-\d{2}$/.test(value), { message: "Invalid start Date given. Please use the 'YYYY-MM-DD' format." }),
     language: z.string(),

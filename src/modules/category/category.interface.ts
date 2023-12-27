@@ -1,10 +1,11 @@
 /* Interface content */
 
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
 
 export interface ICategory {
     name: string;
+    createdBy: Types.ObjectId;
 }
 
 export interface ICategoryMethods {
