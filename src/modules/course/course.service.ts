@@ -17,7 +17,15 @@ export const courseGet = async (query: IQueryBuilder): Promise<{ courses: ICours
     const courses = await Course.find(query.filter, null, {
         sort: query.sort,
         skip: (query.meta.page - 1) * query.meta.limit,
-        limit: query.meta.limit
+        limit: query.meta.limit,
+        populate: {
+            path: 'createdBy',
+            model: 'User2',
+            select: {
+                password: 0,
+                passwordHistory: 0
+            }
+        }
     });
 
     const total = await Course.countDocuments(query.filter);
