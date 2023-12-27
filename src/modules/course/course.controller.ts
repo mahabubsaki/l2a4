@@ -17,7 +17,7 @@ export const coursePostController = catchAsync(async (req: Request, res: Respons
     const userData: ICourse = req.body;
     const result = await coursePost(userData, req.user._id);
     sendResponse<ICourse>(res, {
-        statusCode: httpStatus.OK,
+        statusCode: 201,
         success: true,
         data: result,
         message: "Course created successfully"

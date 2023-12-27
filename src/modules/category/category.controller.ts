@@ -12,10 +12,10 @@ export const categoryPostController = catchAsync(async (req: Request, res: Respo
     const userData: ICategory = req.body;
     const result = await categoryPost(userData, req.user._id);
     sendResponse<ICategory>(res, {
-        statusCode: httpStatus.OK,
+        statusCode: 201,
         success: true,
         data: result,
-        message: "Categories created successfully"
+        message: "Category created successfully"
     });
 });
 
