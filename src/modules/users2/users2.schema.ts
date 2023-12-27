@@ -7,7 +7,7 @@ const userMongooseSchema = new Schema<IUser>(
     {
         username: { type: String, unique: true, required: true },
         email: { type: String, unique: true, required: true },
-        password: { type: String, required: true },
+        password: { type: String, required: true, min: [6, 'Need minimum of 6 characters for password'], max: [50, "Need maximum of 20 characters for password"] },
         passwordHistory: {
             type: [
                 {
@@ -28,7 +28,7 @@ userMongooseSchema.pre('save', async function (next) {
 
 
         this.password = await passwordHasher(this.password);
-        this.passwordHistory[0] = { password: this.password, timestamp: new Date() };
+
 
         next();
     } catch (error) {

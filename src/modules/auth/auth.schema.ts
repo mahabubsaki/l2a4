@@ -10,7 +10,7 @@ const changePassZodSchema = z.object({
     }),
     newPassword: z.string({
         required_error: 'New password required'
-    }),
+    }).min(6, { message: "Need minimum of 6 characters for password" }).max(50, { message: "Need maximum of 20 characters for password" }),
 }).strict();
 
 export {

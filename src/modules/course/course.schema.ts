@@ -5,6 +5,7 @@ import { ICourse } from "./course.interface";
 import AppError from "../../errors/AppError";
 import httpStatus from "http-status";
 import dateToWeek from "../../utilities/dateToWeek";
+import User2 from "../users2/users2.model";
 
 
 const courseMongooseSchema = new mongoose.Schema({
@@ -91,6 +92,30 @@ const courseMongooseSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
+        createdBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User2',
+            required: true,
+            validate: {
+                validator: async function (value: mongoose.Schema.Types.ObjectId) {
+                    try {
+                        const user = await User2.findById(value);
+                        if (!user) {
+                            const error = new mongoose.Error.CastError(
+                                'createdBy',
+                                value,
+                                'No User found with this id'
+                            );
+                            throw error;
+                        }
+                        return true;
+                    } catch (err) {
+                        throw err;
+                    }
+                },
+
+            }
+        }
     },
 });
 

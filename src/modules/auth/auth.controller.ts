@@ -24,7 +24,7 @@ export const authLoginController = catchAsync(async (req: Request, res: Response
 
     const userData: Pick<IUser, 'username' | 'password'> = req.body;
     const result = await loginService(userData);
-    sendResponse<{ user: Omit<IUser, 'password'>, token: string; }>(res, {
+    sendResponse<{ user: Omit<IUser, 'password' | 'passwordHistory'>, token: string; }>(res, {
         statusCode: 200,
         success: true,
         data: result,
@@ -36,8 +36,8 @@ export const authLoginController = catchAsync(async (req: Request, res: Response
 export const authPassChangeController = catchAsync(async (req: Request, res: Response) => {
 
     const userData: { currentPassword: string, newPassword: string; } = req.body;
-    const result = await passChangeService(userData, req.user.password, req.user._id);
-    sendResponse<Omit<IUser, 'password'>>(res, {
+    const result = await passChangeService(userData, req.user.password, req.user._id, req.user.passwordHistory);
+    sendResponse<Omit<IUser, 'password' | 'passwordHistory'>>(res, {
         statusCode: 200,
         success: true,
         data: result,

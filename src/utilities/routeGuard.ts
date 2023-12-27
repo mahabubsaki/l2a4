@@ -13,7 +13,7 @@ const routeGuard = (...roles: string[]) => async (req: Request, _: Response, nex
             throw new AppError(httpStatus.UNAUTHORIZED, "you are not authorized");
         }
         const verifiedUser = jwtTokenVerify(token as string);
-        const validUser = await User2.findById(verifiedUser._id, { role: 1, email: 1, password: 1 });
+        const validUser = await User2.findById(verifiedUser._id, { role: 1, email: 1, password: 1, passwordHistory: 1 });
         if (!validUser) {
             throw new AppError(httpStatus.NOT_FOUND, "User not exist");
         }
