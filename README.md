@@ -32,13 +32,13 @@ This enhanced system ensures secure and organized management of users, courses, 
 ## 1. Clone the repository
 
 ```bash
-git clone https://github.com/Porgramming-Hero-web-course/l2b2a4-course-review-with-auth-mahabubsaki.git
+git clone https://github.com/mahabubsaki/l2a4.git
 ```
 
 ### Go to the project directory
 
 ```bash
-cd .\l2b2a4-course-review-with-auth-mahabubsaki\
+cd .\l2a4\
 ```
 
 ## 2. Install the dependencies
